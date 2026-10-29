@@ -212,9 +212,13 @@
             <!-- Quick Demo URLs for Testing -->
             <div class="quick-links-row">
               <span class="quick-label">Примеры:</span>
-              <button class="chip-link" data-url="https://www.youtube.com/watch?v=dQw4w9WgXcQ">YouTube Demo</button>
+              <button class="chip-link" data-url="https://vkvideo.ru/video-237171219_456239040">VK Видео</button>
+              <button class="chip-link" data-url="https://m.yandex.ru/video/preview/5475430006811771212">Яндекс Видео</button>
+              <button class="chip-link" data-url="https://www.youtube.com/watch?v=dQw4w9WgXcQ">YouTube</button>
               <button class="chip-link" data-url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8">HLS Stream</button>
-              <button class="chip-link" data-url="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">MP4 Demo</button>
+            </div>
+            <div class="url-hint-text">
+              💡 Поддерживаются <strong>YouTube</strong>, <strong>RuTube</strong>, <strong>VK Видео</strong>, <strong>Яндекс Видео</strong>, прямые ссылки <strong>HLS / MP4</strong>, а также плееры сериалов (Kodik, Collaps, Alloha).
             </div>
           </div>
 
@@ -263,9 +267,9 @@
               <video id="html5-video" playsinline></video>
             </div>
 
-            <!-- Generic Iframe Web Embed -->
+            <!-- Generic / Movie / Embed Player -->
             <div id="generic-player-container" class="player-container hidden">
-              <iframe id="generic-player-iframe" sandbox="allow-scripts allow-same-origin allow-forms" frameborder="0"></iframe>
+              <iframe id="generic-player-iframe" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; clipboard-write; screen-wake-lock" frameborder="0"></iframe>
             </div>
 
             <!-- Custom Unified Controls Bar Overlay -->

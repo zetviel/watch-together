@@ -599,6 +599,17 @@ body.dark-theme {
   flex-wrap: wrap;
 }
 
+.url-hint-text {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+.url-hint-text strong {
+  color: var(--text-secondary);
+}
+
 .quick-label {
   font-size: 0.78rem;
   color: var(--text-muted);

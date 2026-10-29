@@ -6,6 +6,7 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import axios from 'axios';
 
 import { setupTelegramAuth } from './telegramAuth.js';
 import { resolveVideoUrl } from './resolver.js';
@@ -55,6 +56,41 @@ app.post('/api/resolve', async (req, res) => {
   } catch (err) {
     console.error('[Resolver Error]', err.message);
     res.status(500).json({ error: 'Failed to resolve video URL: ' + err.message });
+  }
+});
+
+// Proxy Embed endpoint (strips X-Frame-Options and CSP for movie player embeds)
+app.get('/api/proxy-embed', async (req, res) => {
+  const targetUrl = req.query.url;
+  if (!targetUrl) return res.status(400).send('URL is required');
+
+  try {
+    const response = await axios.get(targetUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8'
+      },
+      responseType: 'text',
+      timeout: 10000
+    });
+
+    let html = response.data;
+    if (typeof html === 'string') {
+      const baseTag = `<base href="${targetUrl}">`;
+      if (html.includes('<head>')) {
+        html = html.replace('<head>', `<head>${baseTag}`);
+      } else {
+        html = baseTag + html;
+      }
+    }
+
+    res.removeHeader('X-Frame-Options');
+    res.removeHeader('Content-Security-Policy');
+    res.setHeader('Content-Type', response.headers['content-type'] || 'text/html; charset=utf-8');
+    res.send(html);
+  } catch (err) {
+    res.redirect(targetUrl);
   }
 });
 

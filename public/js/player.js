@@ -372,19 +372,21 @@ class UniversalPlayer {
     try {
       const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
 
-      // RuTube events
-      if (data.type === 'player:changeState') {
+      // RuTube & VK events
+      if (data.type === 'player:changeState' || data.event === 'video_play' || data.message === 'kodik_player_play' || data.action === 'play') {
         const state = data.data?.state;
-        if (state === 'playing') {
-          this.isPlaying = true;
-          this.updatePlayPauseIcon();
-        } else if (state === 'paused' || state === 'stopped') {
+        if (state === 'paused' || state === 'stopped') {
           this.isPlaying = false;
-          this.updatePlayPauseIcon();
+        } else {
+          this.isPlaying = true;
         }
-      } else if (data.type === 'player:currentTime') {
+        this.updatePlayPauseIcon();
+      } else if (data.event === 'video_pause' || data.message === 'kodik_player_pause' || data.action === 'pause') {
+        this.isPlaying = false;
+        this.updatePlayPauseIcon();
+      } else if (data.type === 'player:currentTime' || data.message === 'kodik_player_time_update') {
         if (!this.isSeeking) {
-          this.currentTime = data.data?.time || 0;
+          this.currentTime = data.data?.time || data.time || 0;
           this.updateTimelineUI();
         }
       }
@@ -407,11 +409,15 @@ class UniversalPlayer {
     if (this.currentType === 'youtube' && this.ytPlayer?.playVideo) {
       this.ytPlayer.playVideo();
     } else if (this.currentType === 'vk') {
-      this.sendVkPostMessage({ method: 'play' });
+      this.sendVkPostMessage({ method: 'play', action: 'play' });
     } else if (this.currentType === 'rutube') {
       this.sendRutubePostMessage({ type: 'player:play', data: {} });
     } else if (this.currentType === 'hls' || this.currentType === 'direct') {
       this.html5Video.play().catch(() => {});
+    } else if (this.genericIframe.contentWindow) {
+      try {
+        this.genericIframe.contentWindow.postMessage({ method: 'play', action: 'play', message: 'kodik_player_api_play' }, '*');
+      } catch {}
     }
 
     if (notifyUser && this.onUserPlaybackChange) {
@@ -426,11 +432,15 @@ class UniversalPlayer {
     if (this.currentType === 'youtube' && this.ytPlayer?.pauseVideo) {
       this.ytPlayer.pauseVideo();
     } else if (this.currentType === 'vk') {
-      this.sendVkPostMessage({ method: 'pause' });
+      this.sendVkPostMessage({ method: 'pause', action: 'pause' });
     } else if (this.currentType === 'rutube') {
       this.sendRutubePostMessage({ type: 'player:pause', data: {} });
     } else if (this.currentType === 'hls' || this.currentType === 'direct') {
       this.html5Video.pause();
+    } else if (this.genericIframe.contentWindow) {
+      try {
+        this.genericIframe.contentWindow.postMessage({ method: 'pause', action: 'pause', message: 'kodik_player_api_pause' }, '*');
+      } catch {}
     }
 
     if (notifyUser && this.onUserPlaybackChange) {
@@ -446,11 +456,15 @@ class UniversalPlayer {
     if (this.currentType === 'youtube' && this.ytPlayer?.seekTo) {
       this.ytPlayer.seekTo(target, true);
     } else if (this.currentType === 'vk') {
-      this.sendVkPostMessage({ method: 'seek', time: target });
+      this.sendVkPostMessage({ method: 'seek', action: 'seek', time: target });
     } else if (this.currentType === 'rutube') {
       this.sendRutubePostMessage({ type: 'player:setCurrentTime', data: { time: target } });
     } else if (this.currentType === 'hls' || this.currentType === 'direct') {
       this.html5Video.currentTime = target;
+    } else if (this.genericIframe.contentWindow) {
+      try {
+        this.genericIframe.contentWindow.postMessage({ method: 'seek', action: 'seek', time: target, message: 'kodik_player_api_seek', value: target }, '*');
+      } catch {}
     }
 
     if (notifyUser && this.onUserPlaybackChange) {
