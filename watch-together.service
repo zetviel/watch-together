@@ -1,0 +1,19 @@
+[Unit]
+Description=WatchTogether Collaborative Video Platform
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/watch-together
+ExecStart=/usr/bin/node /opt/watch-together/server/index.js
+Restart=always
+RestartSec=3
+Environment=NODE_ENV=production
+EnvironmentFile=-/opt/watch-together/.env
+
+# Security limits
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

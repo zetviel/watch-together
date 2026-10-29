@@ -1,0 +1,32 @@
+{
+  "name": "watch-together",
+  "version": "1.0.0",
+  "description": "Collaborative synchronized video watching platform with Telegram OAuth, smart player detection, and real-time chat",
+  "main": "server/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "keywords": [
+    "watch-together",
+    "video-sync",
+    "youtube",
+    "rutube",
+    "vk-video",
+    "telegram-oauth",
+    "webrtc",
+    "socketio"
+  ],
+  "author": "zetviel",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.9",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "socket.io": "^4.8.1"
+  }
+}

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <defs>
+    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="50%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#ec4899" />
+    </linearGradient>
+  </defs>
+  <rect width="48" height="48" rx="12" fill="#18181b" />
+  <rect x="2" y="2" width="44" height="44" rx="10" stroke="url(#brandGrad)" stroke-width="2" fill="none" opacity="0.6" />
+  <polygon points="18,14 34,24 18,34" fill="url(#brandGrad)" />
+  <circle cx="36" cy="14" r="3" fill="#3b82f6" />
+  <circle cx="39" cy="20" r="2" fill="#8b5cf6" />
+</svg>
